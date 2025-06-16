@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人工智能大模型及配套软件网址汇总</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --card-bg: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+            --search-height: 60px;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+            h1::after {
+                content: '';
+                position: absolute;
+                bottom: -10px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 80px;
+                height: 4px;
+                background: linear-gradient(90deg, var(--accent), var(--success));
+                border-radius: 2px;
+            }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #555;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .search-container {
+            max-width: 700px;
+            margin: 30px auto;
+            position: relative;
+            animation: fadeIn 0.8s ease;
+            animation-delay: 0.2s;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        .search-box {
+            width: 100%;
+            height: var(--search-height);
+            padding: 0 25px;
+            border-radius: 50px;
+            border: 2px solid #e0e0e0;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            outline: none;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+            .search-box:focus {
+                border-color: var(--accent);
+                box-shadow: 0 5px 25px rgba(67, 97, 238, 0.2);
+            }
+
+        .search-info {
+            text-align: center;
+            margin-top: 15px;
+            color: #666;
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(0);
+            animation: fadeInUp 0.8s ease;
+        }
+
+            .card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            }
+
+        .card-img {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+            .card-img img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: var(--transition);
+            }
+
+        .card:hover .card-img img {
+            transform: scale(1.05);
+        }
+
+        .card-content {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .card p {
+            color: #666;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+            .btn:hover {
+                background: linear-gradient(90deg, var(--primary), var(--secondary));
+                transform: translateY(-3px);
+                box-shadow: 0 7px 20px rgba(67, 97, 238, 0.4);
+            }
+
+            .btn i {
+                margin-left: 8px;
+            }
+
+        .version {
+            background: var(--accent);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .ai-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.8rem;
+            color: var(--primary);
+            animation: pulse 2s infinite;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+            font-size: 1.2rem;
+            display: none;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+            .no-results i {
+                font-size: 3rem;
+                color: #ccc;
+                margin-bottom: 20px;
+                display: block;
+            }
+
+        .tool-tag {
+            display: inline-block;
+            background: #e0e7ff;
+            color: var(--primary);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            font-weight: 500;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .card-tag {
+            background: #f0f5ff;
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .card:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                max-width: 500px;
+                margin: 0 auto;
+            }
+
+            .search-box {
+                height: 50px;
+                font-size: 1rem;
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>人工智能大模型及配套软件网址汇总 <span class="version">第三版</span></h1>
+            <p class="subtitle">精心挑选的顶尖AI工具，助力您的工作效率与创造力提升</p>
+            <i class="fas fa-robot ai-icon"></i>
+        </header>
+
+        <!-- 搜索框 -->
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-box" placeholder="搜索AI工具（名称、描述或标签）...">
+            <p class="search-info">输入关键词搜索工具，支持中文和英文搜索</p>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://web-framwork-study.oss-cn-chengdu.aliyuncs.com/DeepSeek.png" alt="DeepSeek">
+                </div>
+                <div class="card-content">
+                    <h3>DeepSeek <span class="tool-tag">AI研究</span></h3>
+                    <div class="card-tags">
+                        <span class="card-tag">自然语言处理</span>
+                        <span class="card-tag">模型训练</span>
+                        <span class="card-tag">开发者工具</span>
+                    </div>
+                    <p>先进的人工智能研究平台，提供强大的自然语言处理能力和深度学习模型训练工具，适用于开发者和研究人员。</p>
+                    <a href="https://www.deepseek.com/" class="btn" target="_blank">访问官网 <i class="fas fa-external-link-alt"></i></a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://web-framwork-study.oss-cn-chengdu.aliyuncs.com/%E8%B1%86%E5%8C%85.png" alt="豆包AI">
+                </div>
+                <div class="card-content">
+                    <h3>豆包AI <span class="tool-tag">多模态</span></h3>
+                    <div class="card-tags">
+                        <span class="card-tag">文本生成</span>
+                        <span class="card-tag">图像创作</span>
+                        <span class="card-tag">代码编写</span>
+                    </div>
+                    <p>多功能AI创作平台，支持文本生成、图像创作、代码编写等多种AI能力，满足您的多样化创作需求。</p>
+                    <a href="https://www.doubao.com/chat/create-image" class="btn" target="_blank">访问官网 <i class="fas fa-external-link-alt"></i></a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://web-framwork-study.oss-cn-chengdu.aliyuncs.com/%E5%8D%B3%E6%A2%A6.png" alt="即梦AI">
+                </div>
+                <div class="card-content">
+                    <h3>即梦AI <span class="tool-tag">效率工具</span></h3>
+                    <div class="card-tags">
+                        <span class="card-tag">文档处理</span>
+                        <span class="card-tag">图像编辑</span>
+                        <span class="card-tag">数据分析</span>
+                    </div>
+                    <p>一站式AI工具箱，集成多种实用AI功能，包括文档处理、图像编辑、数据分析等，提升工作效率。</p>
+                    <a href="https://jimeng.jianying.com/ai-tool/home/" class="btn" target="_blank">访问官网 <i class="fas fa-external-link-alt"></i></a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://web-framwork-study.oss-cn-chengdu.aliyuncs.com/%E6%9C%A8%E5%8F%8A%E5%9B%BE%E6%A0%87.png" alt="木及设计">
+                </div>
+                <div class="card-content">
+                    <h3>木及设计 <span class="tool-tag">创意设计</span></h3>
+                    <div class="card-tags">
+                        <span class="card-tag">图标生成</span>
+                        <span class="card-tag">UI设计</span>
+                        <span class="card-tag">品牌形象</span>
+                    </div>
+                    <p>AI驱动的设计平台，提供智能图标生成、UI设计、品牌形象设计等服务，让设计更简单高效。</p>
+                    <a href="https://www.mujicv.com/" class="btn" target="_blank">访问官网 <i class="fas fa-external-link-alt"></i></a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://web-framwork-study.oss-cn-chengdu.aliyuncs.com/officeAi%E5%9B%BE%E6%A0%87.png" alt="Office AI">
+                </div>
+                <div class="card-content">
+                    <h3>Office AI <span class="tool-tag">办公套件</span></h3>
+                    <div class="card-tags">
+                        <span class="card-tag">文档处理</span>
+                        <span class="card-tag">数据分析</span>
+                        <span class="card-tag">演示生成</span>
+                    </div>
+                    <p>智能办公解决方案，集成AI功能的Office工具套件，提供文档智能处理、数据分析、演示文稿自动生成等功能。</p>
+                    <a href="https://www.office-ai.cn/static/introductions/officeai/wordfunctions.html" class="btn" target="_blank">访问官网 <i class="fas fa-external-link-alt"></i></a>
+                </div>
+            </div>
+
+            <!-- 新增AI工具卡片 -->
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://web-framwork-study.oss-cn-chengdu.aliyuncs.com/%E7%94%9F%E6%88%90%E7%94%B5%E8%84%91%E5%9B%BE%E7%89%87.png" alt="提示词模板">
+                </div>
+                <div class="card-content">
+                    <h3>模板提示词 <span class="tool-tag">Prompt</span></h3>
+                    <div class="card-tags">
+                        <span class="card-tag">办公辅助</span>
+                        <span class="card-tag">提示词</span>
+                       
+                    </div>
+                    <p>用已经定义好的提示词模板，加快工作效率和减少不必要的思考</p>
+                    <a href="promt.html" class="btn" target="_blank">访问网页 <i class="fas fa-external-link-alt"></i></a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=1000" alt="代码助手">
+                </div>
+                <div class="card-content">
+                    <h3>AI代码助手 <span class="tool-tag">开发工具</span></h3>
+                    <div class="card-tags">
+                        <span class="card-tag">代码补全</span>
+                        <span class="card-tag">错误检测</span>
+                        <span class="card-tag">文档生成</span>
+                    </div>
+                    <p>智能编程辅助工具，支持代码自动补全、错误检测、代码重构和文档生成，提升开发效率。</p>
+                    <a href="https://www.example.com/code-ai" class="btn" target="_blank">访问官网 <i class="fas fa-external-link-alt"></i></a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1677442135722-5f4d5f5b6f5b?q=80&w=1000" alt="语音助手">
+                </div>
+                <div class="card-content">
+                    <h3>智能语音助手 <span class="tool-tag">语音识别</span></h3>
+                    <div class="card-tags">
+                        <span class="card-tag">语音转文字</span>
+                        <span class="card-tag">实时翻译</span>
+                        <span class="card-tag">会议记录</span>
+                    </div>
+                    <p>先进的语音识别与合成系统，支持多语言实时翻译、语音控制、会议记录和语音内容分析。</p>
+                    <a href="https://www.example.com/voice-ai" class="btn" target="_blank">访问官网 <i class="fas fa-external-link-alt"></i></a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1677442135133-33d364e7d1b8?q=80&w=1000" alt="数据分析">
+                </div>
+                <div class="card-content">
+                    <h3>AI数据分析 <span class="tool-tag">商业智能</span></h3>
+                    <div class="card-tags">
+                        <span class="card-tag">数据挖掘</span>
+                        <span class="card-tag">预测分析</span>
+                        <span class="card-tag">可视化</span>
+                    </div>
+                    <p>自动化数据洞察平台，使用机器学习算法进行数据挖掘、预测分析和可视化展示，助力商业决策。</p>
+                    <a href="https://www.example.com/data-ai" class="btn" target="_blank">访问官网 <i class="fas fa-external-link-alt"></i></a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1677442135722-5f4d5f5b6f5b?q=80&w=1000" alt="视频生成">
+                </div>
+                <div class="card-content">
+                    <h3>AI视频生成 <span class="tool-tag">内容创作</span></h3>
+                    <div class="card-tags">
+                        <span class="card-tag">视频编辑</span>
+                        <span class="card-tag">特效制作</span>
+                        <span class="card-tag">内容生成</span>
+                    </div>
+                    <p>智能视频创作平台，根据文本描述自动生成高质量视频内容，支持特效添加和自动剪辑功能。</p>
+                    <a href="https://www.example.com/video-ai" class="btn" target="_blank">访问官网 <i class="fas fa-external-link-alt"></i></a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=1000" alt="教育助手">
+                </div>
+                <div class="card-content">
+                    <h3>AI教育助手 <span class="tool-tag">教育科技</span></h3>
+                    <div class="card-tags">
+                        <span class="card-tag">个性化学习</span>
+                        <span class="card-tag">智能辅导</span>
+                        <span class="card-tag">内容生成</span>
+                    </div>
+                    <p>智能教育平台，提供个性化学习路径规划、智能答疑和教学内容自动生成，提升学习效率。</p>
+                    <a href="https://www.example.com/edu-ai" class="btn" target="_blank">访问官网 <i class="fas fa-external-link-alt"></i></a>
+                </div>
+            </div>
+
+            <!-- 无搜索结果提示 -->
+            <div class="no-results" id="noResults">
+                <i class="fas fa-search"></i>
+                <p>没有找到匹配的工具</p>
+                <p>请尝试其他关键词</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2025 人工智能工具导航（技术支持：专修学院周维|向景凡） | 当前展示12个AI工具</p>
+        </footer>
+    </div>
+
+    <script>
+        // 1. 将所有a标签的跳转方式改为在新页面打开
+        document.querySelectorAll('a').forEach(link => {
+            link.setAttribute('target', '_blank');
+        });
+
+        // 2. 添加关键字搜索功能
+        const searchInput = document.getElementById('searchInput');
+        const cards = document.querySelectorAll('.card');
+        const noResults = document.getElementById('noResults');
+
+        searchInput.addEventListener('input', function () {
+            const searchTerm = this.value.toLowerCase().trim();
+            let hasResults = false;
+
+            cards.forEach(card => {
+                // 跳过无搜索结果提示卡片
+                if (card === noResults) return;
+
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const description = card.querySelector('p').textContent.toLowerCase();
+                const tags = Array.from(card.querySelectorAll('.card-tag')).map(tag => tag.textContent.toLowerCase());
+
+                const tagMatch = tags.some(tag => tag.includes(searchTerm));
+
+                if (title.includes(searchTerm) || description.includes(searchTerm) || tagMatch) {
+                    card.style.display = 'flex';
+                    hasResults = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // 显示/隐藏无结果提示
+            noResults.style.display = hasResults || searchTerm === '' ? 'none' : 'block';
+        });
+
+        // 添加搜索框获得焦点时的效果
+        searchInput.addEventListener('focus', function () {
+            this.parentElement.classList.add('focused');
+        });
+
+        searchInput.addEventListener('blur', function () {
+            this.parentElement.classList.remove('focused');
+        });
+
+        // 添加卡片悬停动画效果
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseenter', function () {
+                this.style.transform = 'translateY(-10px)';
+            });
+
+            card.addEventListener('mouseleave', function () {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // 添加页面加载动画
+        document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(function () {
+                document.body.classList.add('loaded');
+            }, 300);
+        });
+    </script>
+</body>
+</html>
