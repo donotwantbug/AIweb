@@ -1,739 +1,250 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>本地存储文本复制工具</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            color: #333;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            background: rgba(255, 255, 255, 0.97);
-            border-radius: 16px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            padding: 30px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
-        }
-
-        h1 {
-            color: #1a2a6c;
-            font-size: 2.8rem;
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-
-        .subtitle {
-            color: #666;
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-
-        .search-section {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-            .search-section input {
-                flex: 1;
-                min-width: 250px;
-                padding: 14px 20px;
-                border-radius: 8px;
-                border: 2px solid #e0e0e0;
-                font-size: 1rem;
-                transition: all 0.3s;
-                background-color: white;
-            }
-
-                .search-section input:focus {
-                    outline: none;
-                    border-color: #4a7bff;
-                    box-shadow: 0 0 0 3px rgba(74, 123, 255, 0.2);
-                }
-
-        .main-content {
-            display: flex;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
-            }
-        }
-
-        .preset-section {
-            flex: 1;
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            min-height: 500px;
-        }
-
-            .preset-section h2 {
-                color: #1a2a6c;
-                margin-bottom: 25px;
-                padding-bottom: 15px;
-                border-bottom: 2px solid #e0e7ff;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            }
-
-        .preset-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .preset-item {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            border: 1px solid #eaeaea;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-
-            .preset-item:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-                border-color: #c5d5ff;
-            }
-
-        .preset-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .preset-title {
-            font-weight: 600;
-            color: #1a2a6c;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .preset-content {
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            font-size: 0.95rem;
-            background: #f9fbff;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 3px solid #4a7bff;
-            max-height: 150px;
-            overflow-y: auto;
-            flex-grow: 1;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            width: 100%;
-        }
-
-        .copy-btn {
-            background: linear-gradient(135deg, #4a7bff, #1a2a6c);
-            color: white;
-            margin-bottom: 10px;
-        }
-
-            .copy-btn:hover {
-                background: linear-gradient(135deg, #3a6bff, #0a1a5c);
-                box-shadow: 0 4px 12px rgba(58, 107, 255, 0.3);
-            }
-
-        .delete-btn {
-            background: linear-gradient(135deg, #dc3545, #bd2130);
-            color: white;
-        }
-
-            .delete-btn:hover {
-                background: linear-gradient(135deg, #c82333, #9c1c26);
-                box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
-            }
-
-        .custom-section {
-            flex: 1;
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            min-height: 500px;
-        }
-
-            .custom-section h2 {
-                color: #1a2a6c;
-                margin-bottom: 25px;
-                padding-bottom: 15px;
-                border-bottom: 2px solid #e0e7ff;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #444;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 14px;
-            border-radius: 8px;
-            border: 2px solid #e0e0e0;
-            font-size: 1rem;
-            transition: all 0.3s;
-            background-color: white;
-        }
-
-            input:focus, textarea:focus {
-                outline: none;
-                border-color: #4a7bff;
-                box-shadow: 0 0 0 3px rgba(74, 123, 255, 0.2);
-            }
-
-        textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-
-        .add-btn {
-            background: linear-gradient(135deg, #28a745, #1e7e34);
-            color: white;
-            padding: 14px;
-            font-size: 1.1rem;
-        }
-
-            .add-btn:hover {
-                background: linear-gradient(135deg, #218838, #155724);
-                box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
-            }
-
-        .notification {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            padding: 18px 25px;
-            border-radius: 10px;
-            font-weight: 600;
-            z-index: 1000;
-            opacity: 0;
-            transform: translateX(100px);
-            transition: all 0.4s ease;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-        }
-
-            .notification.show {
-                opacity: 1;
-                transform: translateX(0);
-            }
-
-        .success {
-            background: linear-gradient(135deg, #28a745, #1e7e34);
-            color: white;
-        }
-
-        .error {
-            background: linear-gradient(135deg, #dc3545, #bd2130);
-            color: white;
-        }
-
-        .info {
-            background: linear-gradient(135deg, #17a2b8, #138496);
-            color: white;
-        }
-
-        .usage {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 25px;
-            margin-top: 30px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        }
-
-            .usage h2 {
-                color: #1a2a6c;
-                margin-bottom: 20px;
-                padding-bottom: 15px;
-                border-bottom: 2px solid #e0e7ff;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            }
-
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 25px;
-        }
-
-        .step {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-            text-align: center;
-            border: 1px solid #eaeaea;
-        }
-
-            .step i {
-                font-size: 2.5rem;
-                color: #4a7bff;
-                margin-bottom: 20px;
-            }
-
-            .step h3 {
-                color: #1a2a6c;
-                margin-bottom: 15px;
-            }
-
-            .step p {
-                color: #666;
-                line-height: 1.6;
-            }
-
-        .storage-info {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 15px 25px;
-            margin-top: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            text-align: center;
-            color: #666;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 30px;
-            color: #666;
-            font-size: 0.95rem;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #666;
-            grid-column: 1 / -1;
-        }
-
-            .empty-state i {
-                font-size: 3rem;
-                color: #bbb;
-                margin-bottom: 20px;
-            }
-
-        .tag {
-            display: inline-block;
-            background: #e0e7ff;
-            color: #4a7bff;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            margin-top: 10px;
-            font-weight: 600;
-        }
-
-        .app-icon {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, #4a7bff, #1a2a6c);
-            color: white;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>字段管理工具（功能增强）</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+    body {
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+      min-height: 100vh;
+      display: flex; justify-content: center; align-items: flex-start;
+      padding: 30px;
+    }
+    .container {
+      width: 100%; max-width: 1200px;
+      background: rgba(255,255,255,0.97);
+      border-radius: 16px; padding: 30px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+    h1 {
+      color: #1a2a6c; font-size: 2.5rem; text-align: center;
+      margin-bottom: 1rem; font-weight: bold;
+    }
+    .form-group { margin-bottom: 15px; }
+    label { font-weight: bold; display: block; margin-bottom: 5px; }
+    input, textarea {
+      width: 100%; padding: 10px; border-radius: 8px;
+      border: 2px solid #ccc; font-size: 1rem;
+    }
+    textarea { resize: vertical; min-height: 80px; }
+    button {
+      background: #007bff; color: white;
+      padding: 10px 20px; border: none;
+      border-radius: 8px; cursor: pointer;
+      font-size: 1rem; margin-top: 10px; margin-right: 10px;
+    }
+    button:hover { background: #0056b3; }
+    .btn-green { background: #28a745; }
+    .btn-green:hover { background: #1e7e34; }
+    .btn-gray { background: #6c757d; }
+    .btn-gray:hover { background: #5a6268; }
+    .preview-area {
+      margin-top: 30px;
+    }
+    .card {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      background: #f9f9f9;
+    }
+    .card-title {
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #333;
+    }
+    .card-meta {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 5px;
+    }
+    .card-content {
+      margin-top: 10px;
+      white-space: pre-wrap;
+    }
+    .card-buttons {
+      margin-top: 10px;
+    }
+    .card-buttons button {
+      font-size: 0.85rem;
+      margin-right: 10px;
+    }
+    .group-title {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #444;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 4px;
+    }
+    #searchInput {
+      margin-top: 20px;
+      margin-bottom: 10px;
+      padding: 10px;
+      font-size: 1rem;
+      width: 100%;
+      border: 2px solid #bbb;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1><span class="app-icon"><i class="fas fa-copy"></i></span> 本地存储提示词复制工具</h1>
-            <p class="subtitle">添加您常用的提示词文本片段，一键复制到剪贴板 - 所有内容将保存在浏览器中</p>
-        </header>
+  <div class="container">
+    <h1><i class="fas fa-database"></i> 字段管理工具</h1>
 
-        <div class="search-section">
-            <input type="text" id="searchInput" placeholder="搜索片段标题或内容...">
-            <button id="clearStorageBtn" class="btn delete-btn">
-                <i class="fas fa-trash-alt"></i> 清除所有数据
-            </button>
-        </div>
-
-        <div class="main-content">
-            <div class="preset-section">
-                <h2><i class="fas fa-list"></i> 我的提示词文本片段 <span id="snippetCount">(0)</span></h2>
-                <div class="preset-list" id="presetContainer">
-                    <div class="empty-state">
-                        <i class="fas fa-sticky-note"></i>
-                        <h3>暂无文本片段</h3>
-                        <p>请在右侧添加您的第一个文本片段</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="custom-section">
-                <h2><i class="fas fa-plus-circle"></i> 添加新文本片段</h2>
-                <div class="form-group">
-                    <label for="snippetTitle"><i class="fas fa-heading"></i> 片段标题</label>
-                    <input type="text" id="snippetTitle" placeholder="例如：标准邮件签名">
-                </div>
-                <div class="form-group">
-                    <label for="snippetContent"><i class="fas fa-align-left"></i> 文本内容</label>
-                    <textarea id="snippetContent" placeholder="在此输入您要添加的文本内容..."></textarea>
-                </div>
-                <button id="addSnippetBtn" class="btn add-btn">
-                    <i class="fas fa-plus"></i> 添加到我的片段
-                </button>
-            </div>
-        </div>
-
-        <div class="usage">
-            <h2><i class="fas fa-info-circle"></i> 使用指南</h2>
-            <div class="steps">
-                <div class="step">
-                    <i class="fas fa-plus"></i>
-                    <h3>添加片段</h3>
-                    <p>在右侧表单中输入标题和内容，然后点击"添加到我的片段"按钮</p>
-                </div>
-                <div class="step">
-                    <i class="fas fa-mouse-pointer"></i>
-                    <h3>点击复制</h3>
-                    <p>在预设片段区域，点击任意片段下方的"复制内容"按钮</p>
-                </div>
-                <div class="step">
-                    <i class="fas fa-database"></i>
-                    <h3>本地存储</h3>
-                    <p>所有片段自动保存在浏览器中，下次打开仍可使用</p>
-                </div>
-                <div class="step">
-                    <i class="fas fa-search"></i>
-                    <h3>搜索功能</h3>
-                    <p>使用顶部搜索框快速查找特定片段</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="storage-info">
-            <p><i class="fas fa-info-circle"></i> 您的文本片段保存在本地浏览器中，清除浏览器缓存将删除这些数据</p>
-        </div>
-
-        <footer>
-            <p>© 2025 本地存储文本复制工具 | 基于浏览器localStorage技术 | 技术支持：周维</p>
-        </footer>
+    <div class="form-group">
+      <label for="title"><i class="fas fa-heading"></i> 标题</label>
+      <input type="text" id="title" placeholder="请输入标题..." />
+    </div>
+    <div class="form-group">
+      <label for="content"><i class="fas fa-align-left"></i> 内容</label>
+      <textarea id="content" placeholder="请输入内容..."></textarea>
+    </div>
+    <div class="form-group">
+      <label for="author"><i class="fas fa-user"></i> 作者</label>
+      <input type="text" id="author" placeholder="可选：添加作者名" />
+    </div>
+    <div class="form-group">
+      <label for="category"><i class="fas fa-tag"></i> 分类</label>
+      <input type="text" id="category" placeholder="可选：添加分类标签" />
     </div>
 
-    <div class="notification" id="notification">
-        <i class="fas fa-check-circle"></i>
-        <span>文本已成功复制到剪贴板！</span>
+    <div>
+      <button class="btn-green" onclick="addSnippet()"><i class="fas fa-plus-circle"></i> 添加字段</button>
+      <button onclick="exportSnippets()"><i class="fas fa-download"></i> 导出 JSON</button>
+      <label class="btn-gray" style="display: inline-block; padding: 10px 20px; cursor: pointer;">
+        <i class="fas fa-upload"></i> 导入 JSON
+        <input type="file" id="importFile" style="display:none;" accept=".json" onchange="importSnippets(event)" />
+      </label>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const presetContainer = document.getElementById('presetContainer');
-            const addSnippetBtn = document.getElementById('addSnippetBtn');
-            const snippetTitleInput = document.getElementById('snippetTitle');
-            const snippetContentInput = document.getElementById('snippetContent');
-            const notification = document.getElementById('notification');
-            const snippetCount = document.getElementById('snippetCount');
-            const searchInput = document.getElementById('searchInput');
-            const clearStorageBtn = document.getElementById('clearStorageBtn');
+    <input type="text" id="searchInput" placeholder="🔍 搜索标题 / 内容 / 作者 / 分类" oninput="renderPreview()" />
 
-            // 存储键名
-            const STORAGE_KEY = 'textSnippets';
+    <div class="preview-area">
+      <div id="previewContainer"></div>
+    </div>
+  </div>
 
-            // 默认提示词片段
-            const DEFAULT_SNIPPETS = [
-                {
-                    title: "excel提示词（制作表格）",
-                    content: "请帮我制作表格，表头：【请按实际需求填写】，格式要求：【按实际需要填写】，其他要求：【】",
-                    tag: "Excel"
-                },
-                {
-                    title: "word提示词（写工作总结）",
-                    content: "你是一位经验丰富的学校【职务】。我正在准备一份关于[部门名，如：学校办公室] [时间段，如：2024年春季学期]的工作总结报告，受众是[受众，如：校领导/部门全体会议]。请根据我提供的工作要点和数据【上传文件不限于这两种格式】，生成一份结构清晰、重点突出的总结报告草稿。",
-                    tag: "Word"
-                },
-                {
-                    title: "excel提示词（筛选数据）",
-                    content: "请根据【表格文件名，可以多选也可以手动选择】，筛选出【数据】，并汇总成一张新表",
-                    tag: "Excel"
-                },
-                {
-                    title: "word提示词（学校行政工作详细版）",
-                    content: `好的，这是一份专为DeepSeek生成学校行政工作总结设计的提示词（<200字）：
----
-**提示词：为DeepSeek生成学校行政工作总结**
+  <script>
+    const STORAGE_KEY = 'textSnippets';
+    function loadSnippets() {
+      const data = localStorage.getItem(STORAGE_KEY);
+      return data ? JSON.parse(data) : [];
+    }
+    function saveSnippets(data) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+    function renderPreview() {
+      const container = document.getElementById('previewContainer');
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const data = loadSnippets();
+      const grouped = {};
 
-**任务：** 生成一份结构清晰、语言精练的学校行政工作总结。
+      data.forEach(snippet => {
+        const category = snippet.category || '未分类';
+        if (!grouped[category]) grouped[category] = [];
+        grouped[category].push(snippet);
+      });
 
-**关键要求：**
-1.  **格式规范：**
-        *   生成 **纯文本格式**。
-        *   预设文件命名：\`[部门/负责人]_行政工作总结_[时间范围]\` (例：\`办公室_行政工作总结_2025春季\`）。
-        *   预设文件格式：最终用户需保存为 **.docx 或 .pdf**。
-2.  **内容结构 (请严格按此顺序生成)：**
-        *   **标题：** 明确包含部门/负责人、时间范围。
-        *   **主要工作与成果：** 分点简述核心职责履行情况与关键成果（**请用数据/实例支撑**）。
-        *   **存在问题与挑战：** 精炼指出1-3点主要困难。
-        *   **改进计划与展望：** 提出具体、可操作的下一步措施。
-3.  **语言风格：** 正式、简洁、客观，避免空话套话，每段内容精炼（建议每点不超过5行）。
-4.  **提交说明 (请在文末生成)：**
-        *   \`**提交要求：** 请将最终文件（保存为.docx或.pdf）按预设命名规则，于 [截止日期] 前上传至 [指定平台/邮箱地址]。\`
-**请确保内容真实、重点突出，符合学校存档要求。**
----
-**说明：**
-*   方括号 \`[ ]\` 中的内容需用户替换。
-*   明确要求生成“纯文本”，便于用户复制编辑。
-*   预设了文件命名规则和格式要求，并在提交说明中重申。
-*   强制规定了内容结构和逻辑顺序（标题、工作成果、问题、计划）。
-*   特别强调成果要用**数据/实例支撑**，这是AI生成内容容易忽略的关键点。
-*   “提交说明”作为生成内容的一部分放在文末，提醒用户上传要求。
-*   整体控制在200字以内，清晰指导DeepSeek生成符合要求的总结草稿。`,
-                    tag: "Word"
-                }
-            ];
-
-            // 从本地存储加载片段
-            function loadSnippets() {
-                const savedSnippets = localStorage.getItem(STORAGE_KEY);
-                return savedSnippets ? JSON.parse(savedSnippets) : [];
-            }
-
-            // 保存片段到本地存储
-            function saveSnippets(snippets) {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(snippets));
-            }
-
-            let snippets = loadSnippets();
-
-            // 如果没有数据，添加默认片段
-            if (snippets.length === 0) {
-                snippets = [...DEFAULT_SNIPPETS];
-                saveSnippets(snippets);
-            }
-
-            // 渲染预设片段
-            function renderSnippets(snippetsToRender = snippets) {
-                presetContainer.innerHTML = '';
-
-                if (snippetsToRender.length === 0) {
-                    presetContainer.innerHTML = `
-                            <div class="empty-state">
-                                <i class="fas fa-sticky-note"></i>
-                                <h3>暂无文本片段</h3>
-                                <p>请在右侧添加您的第一个文本片段</p>
-                            </div>
-                        `;
-                    snippetCount.textContent = `(0)`;
-                    return;
-                }
-
-                snippetCount.textContent = `(${snippetsToRender.length})`;
-
-                snippetsToRender.forEach((snippet, index) => {
-                    const snippetElement = document.createElement('div');
-                    snippetElement.className = 'preset-item';
-                    snippetElement.innerHTML = `
-                            <div class="preset-header">
-                                <div class="preset-title">
-                                    <i class="fas fa-sticky-note"></i> ${snippet.title}
-                                </div>
-                            </div>
-                            <div class="preset-content">${snippet.content.replace(/\n/g, '<br>')}</div>
-                            ${snippet.tag ? `<span class="tag">${snippet.tag}</span>` : ''}
-                            <button class="btn copy-btn" data-index="${index}">
-                                <i class="fas fa-copy"></i> 复制内容
-                            </button>
-                            <button class="btn delete-btn" data-index="${index}">
-                                <i class="fas fa-trash-alt"></i> 删除片段
-                            </button>
-                        `;
-                    presetContainer.appendChild(snippetElement);
-                });
-
-                // 添加复制事件
-                document.querySelectorAll('.copy-btn').forEach(btn => {
-                    btn.addEventListener('click', function () {
-                        const index = this.getAttribute('data-index');
-                        copyToClipboard(snippets[index].content);
-                    });
-                });
-
-                // 添加删除事件
-                document.querySelectorAll('.delete-btn').forEach(btn => {
-                    btn.addEventListener('click', function () {
-                        const index = this.getAttribute('data-index');
-                        deleteSnippet(index);
-                    });
-                });
-            }
-
-            // 复制到剪贴板
-            function copyToClipboard(text) {
-                navigator.clipboard.writeText(text).then(() => {
-                    showNotification('文本已成功复制到剪贴板！', 'success');
-                }).catch(err => {
-                    showNotification('复制失败: ' + err, 'error');
-                });
-            }
-
-            // 删除片段
-            function deleteSnippet(index) {
-                snippets.splice(index, 1);
-                saveSnippets(snippets);
-                renderSnippets();
-                showNotification('片段已删除', 'info');
-            }
-
-            // 添加新片段
-            function addSnippet() {
-                const title = snippetTitleInput.value.trim();
-                const content = snippetContentInput.value.trim();
-
-                if (!title) {
-                    showNotification('请输入片段标题', 'error');
-                    snippetTitleInput.focus();
-                    return;
-                }
-
-                if (!content) {
-                    showNotification('请输入文本内容', 'error');
-                    snippetContentInput.focus();
-                    return;
-                }
-
-                snippets.push({
-                    title: title,
-                    content: content
-                });
-
-                saveSnippets(snippets);
-                renderSnippets();
-                showNotification('已成功添加新文本片段！', 'success');
-
-                // 清空表单
-                snippetTitleInput.value = '';
-                snippetContentInput.value = '';
-                snippetTitleInput.focus();
-            }
-
-            // 搜索片段
-            function searchSnippets(query) {
-                if (!query) {
-                    renderSnippets(snippets);
-                    return;
-                }
-
-                const lowerQuery = query.toLowerCase();
-                const filtered = snippets.filter(snippet =>
-                    snippet.title.toLowerCase().includes(lowerQuery) ||
-                    snippet.content.toLowerCase().includes(lowerQuery)
-                );
-
-                renderSnippets(filtered);
-            }
-
-            // 清除所有数据
-            function clearStorage() {
-                if (confirm('确定要清除所有保存的文本片段吗？此操作不可撤销！')) {
-                    localStorage.removeItem(STORAGE_KEY);
-                    snippets = [];
-                    renderSnippets();
-                    showNotification('所有数据已清除', 'info');
-                }
-            }
-
-            // 显示通知
-            function showNotification(message, type) {
-                notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : (type === 'error' ? 'exclamation' : 'info')}-circle"></i> <span>${message}</span>`;
-                notification.className = `notification ${type} show`;
-
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                }, 3000);
-            }
-
-            // 事件监听
-            addSnippetBtn.addEventListener('click', addSnippet);
-            searchInput.addEventListener('input', () => searchSnippets(searchInput.value));
-            clearStorageBtn.addEventListener('click', clearStorage);
-
-            // 支持回车键添加
-            snippetTitleInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') addSnippet();
-            });
-
-            snippetContentInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && e.ctrlKey) addSnippet();
-            });
-
-            // 初始渲染
-            renderSnippets();
+      container.innerHTML = '';
+      Object.keys(grouped).sort().forEach(cat => {
+        const list = grouped[cat].filter(s =>
+          s.title.toLowerCase().includes(search) ||
+          s.content.toLowerCase().includes(search) ||
+          (s.author || '').toLowerCase().includes(search) ||
+          (s.category || '').toLowerCase().includes(search)
+        );
+        if (!list.length) return;
+        const groupHeader = document.createElement('div');
+        groupHeader.className = 'group-title';
+        groupHeader.textContent = `📁 ${cat}`;
+        container.appendChild(groupHeader);
+        list.reverse().forEach(snippet => {
+          const div = document.createElement('div');
+          div.className = 'card';
+          div.innerHTML = `
+            <div class="card-title">${snippet.title}</div>
+            <div class="card-meta">作者：${snippet.author || '（未填写）'} ｜ 时间：${snippet.time ? new Date(snippet.time).toLocaleString() : '无'}</div>
+            <div class="card-content">${snippet.content}</div>
+            <div class="card-buttons">
+              <button onclick="copyContent('${btoa(unescape(encodeURIComponent(snippet.content)))}')"><i class="fas fa-copy"></i> 复制</button>
+              <button onclick="deleteSnippet('${snippet.title}')"><i class="fas fa-trash"></i> 删除</button>
+            </div>
+          `;
+          container.appendChild(div);
         });
-    </script>
+      });
+    }
+    function addSnippet() {
+      const title = document.getElementById('title').value.trim();
+      const content = document.getElementById('content').value.trim();
+      const author = document.getElementById('author').value.trim();
+      const category = document.getElementById('category').value.trim();
+      if (!title || !content) {
+        alert("标题和内容为必填项");
+        return;
+      }
+      const snippets = loadSnippets();
+      snippets.push({ title, content, author, category, time: new Date().toISOString() });
+      saveSnippets(snippets);
+      renderPreview();
+      document.getElementById('title').value = '';
+      document.getElementById('content').value = '';
+      document.getElementById('author').value = '';
+      document.getElementById('category').value = '';
+      alert("✅ 添加成功！");
+    }
+    function exportSnippets() {
+      const data = loadSnippets();
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'snippets.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+    function importSnippets(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (!Array.isArray(imported)) throw new Error("格式错误");
+          const existingSnippets = loadSnippets();
+          imported.forEach(item => {
+            if (!existingSnippets.some(existing => existing.title === item.title)) {
+              existingSnippets.push(item);
+            }
+          });
+          saveSnippets(existingSnippets);
+          renderPreview();
+          alert("✅ 导入成功！");
+        } catch (err) {
+          alert("❌ 导入失败：" + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+    function deleteSnippet(title) {
+      if (!confirm("确认删除该字段？")) return;
+      let data = loadSnippets();
+      data = data.filter(s => s.title !== title);
+      saveSnippets(data);
+      renderPreview();
+    }
+    function copyContent(base64Content) {
+      const text = decodeURIComponent(escape(atob(base64Content)));
+      navigator.clipboard.writeText(text).then(() => {
+        alert("✅ 内容已复制到剪贴板");
+      });
+    }
+    renderPreview();
+  </script>
 </body>
 </html>
